@@ -3,10 +3,7 @@ import telebot
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import auth_data
-
-# page = requests.get("https://www.investing.com/currencies/thb-rub")
-# print(page.status_code)
-# from auth_data import token
+import logging
 
 
 def get_cur(url):
@@ -42,6 +39,8 @@ def get_currency_pair(urls):
 
 
 if __name__ == "__main__":
+    logger = telebot.logger
+    telebot.logger.setLevel(logging.DEBUG)
     bot = telebot.TeleBot(auth_data.token, parse_mode=None)
 
 
