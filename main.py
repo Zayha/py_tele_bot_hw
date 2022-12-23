@@ -7,7 +7,7 @@ import logging
 
 
 def get_cur(url):
-    url = 'https://www.investing.com/currencies/thb-rub'
+    # url = 'https://www.investing.com/currencies/thb-rub'
     driver = webdriver.Chrome(executable_path="chromedriver.exe")
 
     try:
