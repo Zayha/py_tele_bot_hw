@@ -46,8 +46,16 @@ def get_currency_pair(urls):
 
 if __name__ == "__main__":
     logger = telebot.logger
+    log_handler = logging.FileHandler('telebot.log')
+    logger.addHandler(log_handler)
+    logger.setLevel(logging.INFO)
     telebot.logger.setLevel(logging.DEBUG)
     bot = telebot.TeleBot(auth_data.token, parse_mode=None)
+
+
+    @bot.message_handler(func=lambda message: True)
+    def log_update(message):
+        logger.info(f'Received update: {message}')
 
 
     @bot.message_handler(commands=['help', 'Help'])
