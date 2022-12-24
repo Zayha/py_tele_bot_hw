@@ -13,6 +13,7 @@ chrome_options.add_argument('--headless')
 prefs = {'profile.managed_default_content_settings.images': 2}
 chrome_options.add_experimental_option('prefs', prefs)
 
+
 def get_cur(url):
     # url = 'https://www.investing.com/currencies/thb-rub'
     driver = webdriver.Chrome(executable_path="chromedriver.exe", options=chrome_options)
@@ -21,7 +22,7 @@ def get_cur(url):
         driver.set_script_timeout(5)
         driver.get(url=url)
         # print(driver.page_source)
-        soup = BeautifulSoup(driver.page_source, "lxml") #html.parser
+        soup = BeautifulSoup(driver.page_source, "lxml")  # html.parser
     except Exception as ex:
         print(ex)
     finally:
@@ -53,11 +54,6 @@ if __name__ == "__main__":
     bot = telebot.TeleBot(auth_data.token, parse_mode=None)
 
 
-    @bot.message_handler(func=lambda message: True)
-    def log_update(message):
-        logger.info(f'Received update: {message}')
-
-
     @bot.message_handler(commands=['help', 'Help'])
     def send_help(message):
         bot.reply_to(message, "Сейчас доступны следующие команды: \n"
@@ -69,14 +65,16 @@ if __name__ == "__main__":
     @bot.message_handler(commands=['start'])
     def start(message):
         markup = types.ReplyKeyboardMarkup()
+
         button1 = types.InlineKeyboardButton(text="EUR/USD \u20AC/$")
         button2 = types.InlineKeyboardButton(text="USD/RUB $/\u20BD")
         button3 = types.InlineKeyboardButton(text="EUR/RUB \u20AC/\u20BD")
         button4 = types.InlineKeyboardButton(text="THB/RUB \u0E3F/\u20BD")
         button5 = types.InlineKeyboardButton(text="CNY/RUB \u00A5/\u20BD")
         button6 = types.InlineKeyboardButton(text="GBP/RUB \u00A3/\u20BD")
+
         markup.add(button1, button2, button3, button4, button5, button6)
-        bot.send_message(message.chat.id, 'Основные пары валют, можно написать свою, просто, через слеш тексом',
+        bot.send_message(message.chat.id, 'Основные пары валют, можно написать свою, просто, через слеш текстом',
                          reply_markup=markup)
 
 
@@ -90,6 +88,11 @@ if __name__ == "__main__":
             bot.send_message(message.chat.id, get_cur(get_currency_pair(message.text[0:7])))
         else:
             bot.send_message(message.chat.id, 'Hi, что бы узнать список доступных команд набери /Help ')
+
+
+    @bot.message_handler(func=lambda message: True)
+    def log_update(message):
+        logger.info(f'Received update: {message}')
 
 
     bot.infinity_polling()
